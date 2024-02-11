@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 import org.rybina.convertor.BirthdayConvertor;
 
 import javax.persistence.Convert;
@@ -26,4 +27,7 @@ public class User {
 
     @Convert(converter = BirthdayConvertor.class)
     private Birthday birthday;
+
+    @Type(type = "com.vladmihalcea.hibernate.type.json.JsonBinaryType")
+    private String info;
 }

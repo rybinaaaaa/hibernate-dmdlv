@@ -27,6 +27,10 @@ dependencies {
 
     testCompileOnly 'org.projectlombok:lombok:1.18.30'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+    implementation 'com.vladmihalcea:hibernate-types-52:2.20.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.3'
+    implementation 'com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.14.3'
 }
 
 test {
