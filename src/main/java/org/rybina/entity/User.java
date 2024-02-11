@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.rybina.convertor.BirthdayConvertor;
 
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -21,6 +23,7 @@ public class User {
     private String username;
     private String firstname;
     private String lastName;
-    private LocalDate birthday;
-    private Integer age;
+
+    @Convert(converter = BirthdayConvertor.class)
+    private Birthday birthday;
 }

@@ -3,6 +3,8 @@ package org.rybina;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.rybina.convertor.BirthdayConvertor;
+import org.rybina.entity.Birthday;
 import org.rybina.entity.User;
 
 import java.sql.SQLException;
@@ -16,6 +18,7 @@ public class HibernateRunner {
 //        hibernate.cfg.xml by default
 //        !!!
         configuration.addAnnotatedClass(User.class);
+        configuration.addAttributeConverter(new BirthdayConvertor(), true);
         configuration.configure();
 
 //        sessionFactory == connectionPool
@@ -26,10 +29,9 @@ public class HibernateRunner {
 
             User user = User.builder()
                     .lastName("lastN2")
-                    .age(20)
                     .firstname("firstn")
-                    .username("test3")
-                    .birthday(LocalDate.of(2004, 2, 28))
+                    .username("test7")
+                    .birthday(new Birthday(LocalDate.of(2004, 2, 28)))
                     .build();
             session.save(user);
             System.out.println("OK");
