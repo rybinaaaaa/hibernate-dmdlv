@@ -1,10 +1,12 @@
 package org.rybina.entity;
 
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 import org.rybina.convertor.BirthdayConvertor;
 
 import javax.persistence.Convert;
@@ -19,6 +21,7 @@ import java.time.LocalDate;
 @Builder
 @Entity
 @Table(name = "users", schema = "public")
+@TypeDef(name = "convJson", typeClass = JsonBinaryType.class)
 public class User {
     @Id
     private String username;
@@ -28,6 +31,6 @@ public class User {
     @Convert(converter = BirthdayConvertor.class)
     private Birthday birthday;
 
-    @Type(type = "com.vladmihalcea.hibernate.type.json.JsonBinaryType")
+    @Type(type = "convJson")
     private String info;
 }
