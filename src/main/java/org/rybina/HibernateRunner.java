@@ -39,10 +39,10 @@ public class HibernateRunner {
 //                        .birthday(new Birthday(LocalDate.of(2004, 4, 12)))
 //                        .build();
 
-                User user1 = session.get(User.class, user.getPersonalInfo());
+//                User user1 = session.get(User.class, user.getPersonalInfo());
 //                System.out.println(user1);
 
-                user1.setCompany(new Company());
+//                user1.setCompany(new Company());
 
                 session.getTransaction().commit();
             } catch (Exception exception) {

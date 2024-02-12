@@ -1,7 +1,11 @@
 package org.rybina;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Test;
+import org.rybina.entity.Company;
 import org.rybina.entity.User;
+import org.rybina.util.HibernateUtil;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
@@ -12,13 +16,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
-import static java.util.Optional.*;
-import static java.util.stream.Collectors.*;
+import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.joining;
 
 public class HibernateRunnerTest {
 
@@ -66,6 +67,44 @@ public class HibernateRunnerTest {
             index++;
             declaredField.setAccessible(true);
             preparedStatement.setObject(index, declaredField.get(user));
+        }
+    }
+
+    @Test
+    void oneToMany() {
+        try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
+            Session session = sessionFactory.openSession()) {
+
+            session.beginTransaction();
+
+            Company company = session.get(Company.class, 8);
+
+            System.out.println(company);
+
+            session.getTransaction().commit();
+        }
+    }
+
+    @Test
+    void addUserToNewCompany() {
+        try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
+            Session session = sessionFactory.openSession()
+        ) {
+
+            session.beginTransaction();
+
+            Company company = Company.builder()
+                    .name("facebook")
+                    .build();
+
+            User user = User.builder().username("Kika")
+                            .build();
+
+            company.addUser(user);
+
+            session.save(company);
+
+            session.getTransaction().commit();
         }
     }
 }
