@@ -3,13 +3,11 @@ package org.rybina;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.rybina.entity.Birthday;
+import org.rybina.entity.Company;
 import org.rybina.entity.PersonalInfo;
 import org.rybina.entity.User;
 import org.rybina.util.HibernateUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 
@@ -17,40 +15,36 @@ import java.time.LocalDate;
 public class HibernateRunner {
 
     public static void main(String[] args) {
+        Company company = new Company();
 
         User user = User.builder()
                 .personalInfo(PersonalInfo.builder()
-                .lastName("Alina")
-                .firstname("Rybina")
-                .birthday(new Birthday(LocalDate.of(2004, 4, 12)))
+                        .lastName("Alina")
+                        .firstname("Rybina")
+                        .birthday(new Birthday(LocalDate.of(2004, 4, 12)))
                         .build())
                 .username("rybinaaaa.a2")
+                .company(company)
                 .build();
 
         log.info("User entity is in transient state, object {}", user);
 
         try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory()) {
-            try (Session session1 = sessionFactory.openSession()) {
-                Transaction transaction = session1.beginTransaction();
-                log.trace("Transaction is created {}", transaction);
+            try (Session session = sessionFactory.openSession()) {
 
-                session1.saveOrUpdate(user);
+                session.beginTransaction();
+//                PersonalInfo userKey = PersonalInfo.builder()
+//                        .lastName("Alina")
+//                        .firstname("Rybina")
+//                        .birthday(new Birthday(LocalDate.of(2004, 4, 12)))
+//                        .build();
 
-                log.trace("User is in persistence state {}, session {}", user, session1);
-                session1.getTransaction().commit();
+                User user1 = session.get(User.class, user.getPersonalInfo());
+//                System.out.println(user1);
 
-                log.warn("User is in detached state {}, session is closed {}", user, session1);
+                user1.setCompany(new Company());
 
-                try(Session session2 = sessionFactory.openSession()) {
-                    PersonalInfo userKey = PersonalInfo.builder()
-                            .lastName("Alina")
-                            .firstname("Rybina")
-                            .birthday(new Birthday(LocalDate.of(2004, 4, 12)))
-                            .build();
-
-                    User user1 = session2.get(User.class, userKey);
-                    System.out.println(user1);
-                }
+                session.getTransaction().commit();
             } catch (Exception exception) {
                 log.error("Exception occurred", exception);
                 throw exception;

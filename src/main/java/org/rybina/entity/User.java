@@ -25,7 +25,10 @@ public class User {
     @Column
     private String username;
 
-
     @Type(type = "convJson")
     private String info;
+
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
 }

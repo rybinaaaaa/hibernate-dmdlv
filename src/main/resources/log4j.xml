@@ -26,15 +26,15 @@
     </appender>
 
 <!--    additivity false значит, что если данный пакет выше по иерархии уже отображается, то мы отменяем его отображение в пользу нашего этого логгера-->
-    <logger name="org.rybina" additivity="false">
-        <level value="info" />
-        <appender-ref ref="file"/>
-    </logger>
+<!--    <logger name="org.rybina" additivity="false">-->
+<!--        <level value="info" />-->
+<!--        <appender-ref ref="file"/>-->
+<!--    </logger>-->
 
     <root>
         <level value="warn" />
         <appender-ref ref="console" />
-        <appender-ref ref="file" />
+<!--        <appender-ref ref="file" />-->
     </root>
 
 </log4j:configuration>
