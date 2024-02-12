@@ -8,9 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
@@ -20,10 +18,13 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "users", schema = "public")
 public class User {
-    @Id
+
+    @EmbeddedId
+    private PersonalInfo personalInfo;
+
+    @Column
     private String username;
 
-    private PersonalInfo personalInfo;
 
     @Type(type = "convJson")
     private String info;
