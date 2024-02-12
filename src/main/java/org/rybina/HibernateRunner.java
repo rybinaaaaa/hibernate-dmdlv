@@ -1,50 +1,48 @@
 package org.rybina;
 
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-import org.rybina.convertor.BirthdayConvertor;
 import org.rybina.entity.Birthday;
 import org.rybina.entity.User;
+import org.rybina.util.HibernateUtil;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Properties;
 
 public class HibernateRunner {
 
     public static void main(String[] args) throws SQLException {
-        Configuration configuration = new Configuration();
-//        hibernate.cfg.xml by default
-//        !!!
-        configuration.addAnnotatedClass(User.class);
-//        configuration.addAttributeConverter(new BirthdayConvertor(), true);
-        configuration.registerTypeOverride(new JsonBinaryType());
-        configuration.configure();
+        User user = User.builder()
+                .lastName("Alina")
+                .firstname("Rybina")
+                .username("rybinaaaa.a")
+                .birthday(new Birthday(LocalDate.of(2004, 4, 12)))
+                .build();
 
-//        sessionFactory == connectionPool
-        try (SessionFactory sessionFactory = configuration.buildSessionFactory();
-             Session session = sessionFactory.openSession();
-        ) {
-            session.beginTransaction();
+        try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory()) {
+            try (Session session1 = sessionFactory.openSession()) {
 
-            User user = User.builder()
-                    .lastName("lastN2")
-                    .firstname("firstn")
-                    .username(LocalDateTime.now().toString())
-                    .birthday(new Birthday(LocalDate.of(2004, 2, 28)))
-                    .info("""
-                            {
-                                "name": "ja",
-                                "id": 25
-                            }""")
-                    .build();
-            session.save(user);
-            System.out.println("OK");
+                session1.beginTransaction();
 
-            session.getTransaction().commit();
+                session1.getTransaction().commit();
+
+                session1.beginTransaction();
+
+                session1.saveOrUpdate(user);
+                user.setFirstname("kkk");
+
+                System.out.println(session1.isDirty());
+
+                session1.getTransaction().commit();
+            }
+
+            try (Session session2 = sessionFactory.openSession()) {
+                session2.beginTransaction();
+
+//                session2.delete(user);
+
+                session2.getTransaction().commit();
+            }
         }
     }
 }
