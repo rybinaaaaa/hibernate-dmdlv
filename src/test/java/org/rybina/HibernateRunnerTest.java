@@ -258,4 +258,21 @@ public class HibernateRunnerTest {
             session.getTransaction().commit();
         }
     }
+
+    @Test
+    void checkH2() {
+        try (
+                SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
+                Session session = sessionFactory.openSession()
+        ) {
+            session.beginTransaction();
+
+//            Постгрес не может работать с такими данными как SortedMap
+            Company instagram = Company.builder().name("instagram").build();
+
+            session.save(instagram);
+
+            session.getTransaction().commit();
+        }
+    }
 }
