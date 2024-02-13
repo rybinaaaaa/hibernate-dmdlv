@@ -13,6 +13,7 @@ import java.util.List;
 @ToString(exclude = {"profile", "userChats"})
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(of = "username")
 @Builder
 @TypeDef(name = "convJson", typeClass = JsonBinaryType.class)
 @Entity

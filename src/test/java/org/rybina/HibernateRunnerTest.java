@@ -20,6 +20,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static java.time.Instant.*;
 import static java.util.Optional.ofNullable;
@@ -164,9 +165,9 @@ public class HibernateRunnerTest {
 
             session.getTransaction().commit();
         }
-        List<User> users = company.getUsers();
+        Map<String, User> users = company.getUsers();
 
-        users.forEach(System.out::println);
+        users.forEach((k, v) -> System.out.println(v));
     }
 
     @Test
@@ -177,7 +178,7 @@ public class HibernateRunnerTest {
             session.beginTransaction();
 
             Company company = session.getReference(Company.class, 10);
-            company.getUsers().removeIf(user -> user.getId().equals(16));
+//            company.getUsers().removeIf(user -> user.getId().equals(16));
 
             System.out.println(session.isDirty());
             session.getTransaction().commit();
@@ -252,7 +253,7 @@ public class HibernateRunnerTest {
 
 //            getUsers().forEach(company::addUser);
 
-            company.getUsers().forEach(System.out::println);
+            company.getUsers().forEach((k, v) -> System.out.println(v));
 
             session.getTransaction().commit();
         }

@@ -1,10 +1,13 @@
 package org.rybina.entity;
 
 import lombok.*;
+import org.hibernate.annotations.SortNatural;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Data
@@ -30,11 +33,13 @@ public class Company {
     @Builder.Default // написано для того, чтобы при нашем билдере ставилось дефолтное значение
 //  orphanRemoval  — Что делать с таблицей родителем если мы из него удаляем какой-то дочерний элемент?
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
-    @OrderBy("username DESC, personalInfo.lastName ASC")
-    private List<User> users = new ArrayList<>();
+//    @OrderBy("username DESC, personalInfo.lastName ASC")
+    @MapKey(name = "username")
+    @SortNatural
+    private Map<String, User> users = new HashMap<>();
 
     public void addUser(User user) {
-        users.add(user);
+        users.put(user.getUsername(), user);
         user.setCompany(this);
     }
 }
