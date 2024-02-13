@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@ToString(exclude = {"profile", "chats"})
+@ToString(exclude = {"profile", "userChats"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -40,16 +40,6 @@ public class User {
     private Profile profile;
 
     @Builder.Default
-    @ManyToMany
-//    @JoinTable(name = "users_chat", joinColumns = {@JoinColumn(name = "user_id")})
-    @JoinTable(name = "users_chat",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "chat_id")
-    )
-    private List<Chat> chats = new ArrayList<>();
-
-    public void addChat(Chat chat) {
-        chats.add(chat);
-        chat.getUsers().add(this);
-    }
+    @OneToMany(mappedBy = "user")
+    private List<UserChat> userChats = new ArrayList<>();
 }

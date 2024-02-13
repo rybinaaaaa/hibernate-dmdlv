@@ -22,6 +22,12 @@ public class Company {
     @Column
     private String name;
 
+    @Builder.Default
+    @ElementCollection
+    @CollectionTable(name = "company_locale", joinColumns = @JoinColumn(name = "company_id"))
+//    @AttributeOverride(name = "название внуьри прикрепленного класса", column = @Column(name = "название колонки в бд"))
+    private List<LocaleInfo> localeInfos = new ArrayList<>();
+
     @Builder.Default // написано для того, чтобы при нашем билдере ставилось дефолтное значение
 //  orphanRemoval  — Что делать с таблицей родителем если мы из него удаляем какой-то дочерний элемент?
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)

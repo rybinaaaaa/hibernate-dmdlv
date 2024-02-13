@@ -16,10 +16,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
+import static java.time.Instant.*;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.joining;
 
@@ -214,14 +216,42 @@ public class HibernateRunnerTest {
                 Session session = sessionFactory.openSession()
         ) {
             session.beginTransaction();
+
             User user = session.get(User.class, 22);
 
             Chat chat = Chat.builder()
                     .name("spring")
                     .build();
-            user.addChat(chat);
 
             session.save(chat);
+
+            UserChat userChat = UserChat.builder()
+                    .createdAt(now())
+                    .createdBy(user.getUsername())
+                    .build();
+
+            userChat.setUser(user);
+            userChat.setChat(chat);
+//
+//
+//            session.save(chat);
+
+            session.getTransaction().commit();
+        }
+    }
+
+    @Test
+    void localeInfo() {
+        try (
+                SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
+                Session session = sessionFactory.openSession()
+        ) {
+            session.beginTransaction();
+
+            Company company = session.get(Company.class, 10);
+
+            company.getLocaleInfos().add(LocaleInfo.of("ua", "Описание на укр"));
+            company.getLocaleInfos().add(LocaleInfo.of("en", "Описание на англ"));
 
             session.getTransaction().commit();
         }
