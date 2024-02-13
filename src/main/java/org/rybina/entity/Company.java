@@ -23,7 +23,8 @@ public class Company {
     private String name;
 
     @Builder.Default // написано для того, чтобы при нашем билдере ставилось дефолтное значение
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+//  orphanRemoval  — Что делать с таблицей родителем если мы из него удаляем какой-то дочерний элемент?
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<User> users = new ArrayList<>();
 
     public void addUser(User user) {

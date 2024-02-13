@@ -1,9 +1,12 @@
 package org.rybina;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Test;
+import org.rybina.entity.Birthday;
 import org.rybina.entity.Company;
+import org.rybina.entity.PersonalInfo;
 import org.rybina.entity.User;
 import org.rybina.util.HibernateUtil;
 
@@ -16,12 +19,49 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.List;
 
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.joining;
 
 public class HibernateRunnerTest {
+
+    List<User> getUsers() {
+        User user1 = User.builder()
+                .personalInfo(PersonalInfo.builder()
+                        .firstname("John")
+                        .lastName("Doe")
+                        .birthday(new Birthday(LocalDate.of(1990, 1, 1)))
+                        .build())
+                .username("johndoe90")
+                .info("{\"hobbies\":[\"football\",\"reading\"]}")
+                .build();
+
+        // Creating the second user
+        User user2 = User.builder()
+                .personalInfo(PersonalInfo.builder()
+                        .firstname("Alex")
+                        .lastName("Smith")
+                        .birthday(new Birthday(LocalDate.of(1985, 5, 15)))
+                        .build())
+                .username("alexsmith85")
+                .info("{\"hobbies\":[\"swimming\",\"traveling\"]}")
+                .build();
+
+        // Creating the third user
+        User user3 = User.builder()
+                .personalInfo(PersonalInfo.builder()
+                        .firstname("Maria")
+                        .lastName("Johnson")
+                        .birthday(new Birthday(LocalDate.of(1995, 3, 25)))
+                        .build())
+                .username("mariajohnson95")
+                .info("{\"hobbies\":[\"painting\",\"music\"]}")
+                .build();
+        return List.of(user1, user2, user3);
+    }
 
     @Test
     void checkGetReflectionApi() throws SQLException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchFieldException {
@@ -73,7 +113,7 @@ public class HibernateRunnerTest {
     @Test
     void oneToMany() {
         try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
-            Session session = sessionFactory.openSession()) {
+             Session session = sessionFactory.openSession()) {
 
             session.beginTransaction();
 
@@ -88,7 +128,7 @@ public class HibernateRunnerTest {
     @Test
     void addUserToNewCompany() {
         try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
-            Session session = sessionFactory.openSession()
+             Session session = sessionFactory.openSession()
         ) {
 
             session.beginTransaction();
@@ -98,13 +138,51 @@ public class HibernateRunnerTest {
                     .build();
 
             User user = User.builder().username("Kika")
-                            .build();
+                    .build();
 
             company.addUser(user);
 
             session.save(company);
 
             session.getTransaction().commit();
+        }
+    }
+
+    @Test
+    void checkLazyInitialization() {
+        Company company = null;
+
+        try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
+             Session session = sessionFactory.openSession()
+        ) {
+
+            session.beginTransaction();
+
+
+            company = session.get(Company.class, 10);
+
+            Hibernate.initialize(company.getUsers());
+
+            session.getTransaction().commit();
+        }
+        List<User> users = company.getUsers();
+
+        users.forEach(System.out::println);
+    }
+
+    @Test
+    void checkOrphanRemoval() {
+        try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
+             Session session = sessionFactory.openSession()
+        ) {
+            session.beginTransaction();
+
+            Company company = session.getReference(Company.class, 10);
+            company.getUsers().removeIf(user -> user.getId().equals(16));
+
+            System.out.println(session.isDirty());
+            session.getTransaction().commit();
+            System.out.println();
         }
     }
 }
