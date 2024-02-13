@@ -5,6 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Test;
 import org.rybina.entity.*;
+import org.rybina.util.HibernateTestUtil;
 import org.rybina.util.HibernateUtil;
 
 import javax.persistence.Column;
@@ -262,15 +263,12 @@ public class HibernateRunnerTest {
     @Test
     void checkH2() {
         try (
-                SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
+                SessionFactory sessionFactory = HibernateTestUtil.buildSessionFactory();
                 Session session = sessionFactory.openSession()
         ) {
             session.beginTransaction();
 
-//            Постгрес не может работать с такими данными как SortedMap
-            Company instagram = Company.builder().name("instagram").build();
-
-            session.save(instagram);
+            session.get(Company.class, 10);
 
             session.getTransaction().commit();
         }
