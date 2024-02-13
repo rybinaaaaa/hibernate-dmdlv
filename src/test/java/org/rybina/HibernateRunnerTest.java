@@ -190,19 +190,38 @@ public class HibernateRunnerTest {
         ) {
             session.beginTransaction();
 
-//            User user = getUsers().get(0);
-//
-//            Profile profile = Profile.builder()
-//                    .language("ua")
-//                    .street("Chaloupeckeho")
-//                    .build();
-//
-//            session.save(user);
-//
-//            profile.setUser(user);
+            User user = getUsers().get(0);
 
+            Profile profile = Profile.builder()
+                    .language("ua")
+                    .street("Chaloupeckeho")
+                    .build();
+
+            profile.setUser(user);
+            session.save(user);
+//            profile.setUser(user);
+//            User user = session.get(User.class, 22);
+//            System.out.println();
+
+            session.getTransaction().commit();
+        }
+    }
+
+    @Test
+    void checkManyToMany() {
+        try (
+                SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
+                Session session = sessionFactory.openSession()
+        ) {
+            session.beginTransaction();
             User user = session.get(User.class, 22);
-            System.out.println();
+
+            Chat chat = Chat.builder()
+                    .name("spring")
+                    .build();
+            user.addChat(chat);
+
+            session.save(chat);
 
             session.getTransaction().commit();
         }

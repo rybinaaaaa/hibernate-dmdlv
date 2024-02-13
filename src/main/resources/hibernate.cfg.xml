@@ -23,6 +23,7 @@
 
     <mapping class="org.rybina.entity.User" />
     <mapping class="org.rybina.entity.Company" />
+    <mapping class="org.rybina.entity.Chat" />
     <mapping class="org.rybina.entity.Profile" />
     <!-- DB schema will be updated if needed -->
     <!-- <property name="hibernate.hbm2ddl.auto">update</property> -->
