@@ -1,7 +1,6 @@
 package org.rybina.entity;
 
 import lombok.*;
-import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -31,6 +30,7 @@ public class Company {
     @Builder.Default // написано для того, чтобы при нашем билдере ставилось дефолтное значение
 //  orphanRemoval  — Что делать с таблицей родителем если мы из него удаляем какой-то дочерний элемент?
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("username DESC, personalInfo.lastName ASC")
     private List<User> users = new ArrayList<>();
 
     public void addUser(User user) {
