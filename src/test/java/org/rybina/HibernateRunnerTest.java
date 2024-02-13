@@ -4,10 +4,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Test;
-import org.rybina.entity.Birthday;
-import org.rybina.entity.Company;
-import org.rybina.entity.PersonalInfo;
-import org.rybina.entity.User;
+import org.rybina.entity.*;
 import org.rybina.util.HibernateUtil;
 
 import javax.persistence.Column;
@@ -183,6 +180,31 @@ public class HibernateRunnerTest {
             System.out.println(session.isDirty());
             session.getTransaction().commit();
             System.out.println();
+        }
+    }
+
+    @Test
+    void checkOneToOne() {
+        try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
+             Session session = sessionFactory.openSession()
+        ) {
+            session.beginTransaction();
+
+//            User user = getUsers().get(0);
+//
+//            Profile profile = Profile.builder()
+//                    .language("ua")
+//                    .street("Chaloupeckeho")
+//                    .build();
+//
+//            session.save(user);
+//
+//            profile.setUser(user);
+
+            User user = session.get(User.class, 22);
+            System.out.println();
+
+            session.getTransaction().commit();
         }
     }
 }

@@ -14,6 +14,7 @@ import javax.persistence.*;
 @TypeDef(name = "convJson", typeClass = JsonBinaryType.class)
 @Entity
 @Table(name = "users", schema = "public")
+@ToString(exclude = {"profile"})
 public class User {
 
     @Id
@@ -32,4 +33,7 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Profile profile;
 }
