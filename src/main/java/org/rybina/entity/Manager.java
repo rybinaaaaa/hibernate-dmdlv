@@ -9,19 +9,19 @@ import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import java.util.List;
 
-@EqualsAndHashCode(callSuper = true)
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
-@Entity
-@PrimaryKeyJoinColumn(name = "id")
-public class Manager extends User {
+//@EqualsAndHashCode(callSuper = true)
+//@NoArgsConstructor
+//@AllArgsConstructor
+//@Data
+//@Entity
+//@PrimaryKeyJoinColumn(name = "id")
+public class Manager{
 
-    private String projectName;
-
-    @Builder
-    public Manager(Integer id, PersonalInfo personalInfo, String username, String info, Company company, Profile profile, List<UserChat> userChats, String projectName) {
-        super(id, personalInfo, username, info, company, profile, userChats);
-        this.projectName = projectName;
-    }
+//    private String projectName;
+//
+//    @Builder
+//    public Manager(Integer id, PersonalInfo personalInfo, String username, String info, Company company, Profile profile, List<UserChat> userChats, String projectName) {
+//        super(id, personalInfo, username, info, company, profile, userChats);
+//        this.projectName = projectName;
+//    }
 }

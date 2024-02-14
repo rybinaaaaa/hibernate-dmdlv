@@ -18,5 +18,6 @@
         <mapping class="org.rybina.entity.UserChat"/>
         <mapping class="org.rybina.entity.Programmer" />
         <mapping class="org.rybina.entity.Manager" />
+        <mapping class="org.rybina.entity.Payment" />
     </session-factory>
 </hibernate-configuration>
