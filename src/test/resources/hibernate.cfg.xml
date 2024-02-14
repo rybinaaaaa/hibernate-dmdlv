@@ -16,5 +16,7 @@
         <mapping class="org.rybina.entity.Profile"/>
         <mapping class="org.rybina.entity.Chat"/>
         <mapping class="org.rybina.entity.UserChat"/>
+        <mapping class="org.rybina.entity.Programmer" />
+        <mapping class="org.rybina.entity.Manager" />
     </session-factory>
 </hibernate-configuration>

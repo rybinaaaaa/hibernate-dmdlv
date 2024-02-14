@@ -14,7 +14,11 @@ import java.util.TreeMap;
 @ToString(exclude = "users")
 @AllArgsConstructor
 @Builder
-public class Company extends BaseEntity<Integer> {
+public class Company {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @Column
     private String name;

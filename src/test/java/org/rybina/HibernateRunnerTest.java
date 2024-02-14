@@ -17,52 +17,50 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
-import static java.time.Instant.*;
+import static java.time.Instant.now;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.joining;
 
 public class HibernateRunnerTest {
 
-    List<User> getUsers() {
-        User user1 = User.builder()
-                .personalInfo(PersonalInfo.builder()
-                        .firstname("John")
-                        .lastName("Doe")
-                        .birthday(new Birthday(LocalDate.of(1990, 1, 1)))
-                        .build())
-                .username("johndoe90")
-                .info("{\"hobbies\":[\"football\",\"reading\"]}")
-                .build();
-
-        // Creating the second user
-        User user2 = User.builder()
-                .personalInfo(PersonalInfo.builder()
-                        .firstname("Alex")
-                        .lastName("Smith")
-                        .birthday(new Birthday(LocalDate.of(1985, 5, 15)))
-                        .build())
-                .username("alexsmith85")
-                .info("{\"hobbies\":[\"swimming\",\"traveling\"]}")
-                .build();
-
-        // Creating the third user
-        User user3 = User.builder()
-                .personalInfo(PersonalInfo.builder()
-                        .firstname("Maria")
-                        .lastName("Johnson")
-                        .birthday(new Birthday(LocalDate.of(1995, 3, 25)))
-                        .build())
-                .username("mariajohnson95")
-                .info("{\"hobbies\":[\"painting\",\"music\"]}")
-                .build();
-        return List.of(user1, user2, user3);
-    }
+//    List<User> getUsers() {
+//        User user1 = User.builder()
+//                .personalInfo(PersonalInfo.builder()
+//                        .firstname("John")
+//                        .lastName("Doe")
+//                        .birthday(new Birthday(LocalDate.of(1990, 1, 1)))
+//                        .build())
+//                .username("johndoe90")
+//                .info("{\"hobbies\":[\"football\",\"reading\"]}")
+//                .build();
+//
+//        // Creating the second user
+//        User user2 = User.builder()
+//                .personalInfo(PersonalInfo.builder()
+//                        .firstname("Alex")
+//                        .lastName("Smith")
+//                        .birthday(new Birthday(LocalDate.of(1985, 5, 15)))
+//                        .build())
+//                .username("alexsmith85")
+//                .info("{\"hobbies\":[\"swimming\",\"traveling\"]}")
+//                .build();
+//
+//        // Creating the third user
+//        User user3 = User.builder()
+//                .personalInfo(PersonalInfo.builder()
+//                        .firstname("Maria")
+//                        .lastName("Johnson")
+//                        .birthday(new Birthday(LocalDate.of(1995, 3, 25)))
+//                        .build())
+//                .username("mariajohnson95")
+//                .info("{\"hobbies\":[\"painting\",\"music\"]}")
+//                .build();
+//        return List.of(user1, user2, user3);
+//    }
 
     @Test
     void checkGetReflectionApi() throws SQLException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchFieldException {
@@ -83,7 +81,8 @@ public class HibernateRunnerTest {
 
     @Test
     void checkReflectionApi() throws SQLException, IllegalAccessException {
-        User user = User.builder().build();
+//        User user = User.builder().build();
+        User user = null;
 
         String sql = """
                 insert into %s (%s) values (%s)
@@ -138,8 +137,10 @@ public class HibernateRunnerTest {
                     .name("facebook")
                     .build();
 
-            User user = User.builder().username("Kika")
-                    .build();
+//            User user = User.builder().username("Kika")
+//                    .build();
+//
+            User user = null;
 
             company.addUser(user);
 
@@ -194,7 +195,9 @@ public class HibernateRunnerTest {
         ) {
             session.beginTransaction();
 
-            User user = getUsers().get(0);
+//            User user = getUsers().get(0);
+
+            User user = null;
 
             Profile profile = Profile.builder()
                     .language("ua")
@@ -271,6 +274,52 @@ public class HibernateRunnerTest {
             session.get(Company.class, 10);
 
             session.save(Company.builder().name("twitter").build());
+
+            session.getTransaction().commit();
+        }
+    }
+
+    @Test
+    void checkInheritancePerTable() {
+        try (
+                SessionFactory sessionFactory = HibernateTestUtil.buildSessionFactory();
+                Session session = sessionFactory.openSession()
+        ) {
+            session.beginTransaction();
+
+            session.get(Company.class, 10);
+
+            Programmer programmer = Programmer.builder()
+                    .personalInfo(PersonalInfo.builder()
+                            .firstname("Alina")
+                            .lastName("Rybina")
+                            .birthday(new Birthday(LocalDate.of(1995, 3, 25)))
+                            .build())
+                    .username("rybinaaa.a")
+//                    .info("{\"hobbies\":[\"painting\",\"music\"]}")
+                    .language(Language.JAVA)
+                    .build();
+
+            session.save(programmer);
+
+            Manager manager = Manager.builder()
+                    .personalInfo(PersonalInfo.builder()
+                            .firstname("Danya")
+                            .lastName("Bykov")
+                            .birthday(new Birthday(LocalDate.of(1995, 3, 25)))
+                            .build())
+                    .username("danil.o")
+//                    .info("{\"hobbies\":[\"painting\",\"music\"]}")
+                    .projectName("appleMania")
+                    .build();
+
+            session.save(manager);
+
+            session.flush();
+
+            session.clear();
+
+            Programmer programmer1 = session.get(Programmer.class, 1);
 
             session.getTransaction().commit();
         }

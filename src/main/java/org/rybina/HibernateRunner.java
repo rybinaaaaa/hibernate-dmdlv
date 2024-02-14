@@ -17,15 +17,17 @@ public class HibernateRunner {
     public static void main(String[] args) {
         Company company = new Company();
 
-        User user = User.builder()
-                .personalInfo(PersonalInfo.builder()
-                        .lastName("Alina")
-                        .firstname("Rybina")
-                        .birthday(new Birthday(LocalDate.of(2004, 4, 12)))
-                        .build())
-                .username("rybinaaaa.a2")
-                .company(company)
-                .build();
+//        User user = User.builder()
+//                .personalInfo(PersonalInfo.builder()
+//                        .lastName("Alina")
+//                        .firstname("Rybina")
+//                        .birthday(new Birthday(LocalDate.of(2004, 4, 12)))
+//                        .build())
+//                .username("rybinaaaa.a2")
+//                .company(company)
+//                .build();
+
+        User user = null;
 
         log.info("User entity is in transient state, object {}", user);
 

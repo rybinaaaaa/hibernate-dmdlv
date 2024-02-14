@@ -12,7 +12,11 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @ToString(exclude = "userChats")
-public class Chat extends BaseEntity<Integer> {
+public class Chat {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @Column(nullable = false, unique = true)
     String name;

@@ -14,14 +14,14 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "username")
-@Builder
 @TypeDef(name = "convJson", typeClass = JsonBinaryType.class)
 @Entity
 @Table(name = "users", schema = "public")
-public class User {
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public abstract class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
 
     @Embedded
@@ -40,7 +40,6 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Profile profile;
 
-    @Builder.Default
     @OneToMany(mappedBy = "user")
     private List<UserChat> userChats = new ArrayList<>();
 }
