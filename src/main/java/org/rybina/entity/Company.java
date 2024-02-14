@@ -4,7 +4,9 @@ import lombok.*;
 import org.hibernate.annotations.SortNatural;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 @Entity
 @Data
@@ -12,11 +14,7 @@ import java.util.*;
 @ToString(exclude = "users")
 @AllArgsConstructor
 @Builder
-public class Company {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class Company extends BaseEntity<Integer> {
 
     @Column
     private String name;

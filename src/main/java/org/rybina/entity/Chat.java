@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 @Entity
@@ -13,11 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @ToString(exclude = "userChats")
-public class Chat {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class Chat extends BaseEntity<Integer> {
 
     @Column(nullable = false, unique = true)
     String name;
