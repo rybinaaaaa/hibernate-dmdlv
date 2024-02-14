@@ -319,8 +319,13 @@ public class HibernateRunnerTest {
 
             session.clear();
 
-            Programmer programmer1 = session.get(Programmer.class, 1);
-            Manager manager1 = session.get(Manager.class, 2);
+//            Programmer programmer1 = session.get(Programmer.class, 1);
+//            Manager manager1 = session.get(Manager.class, 2);
+
+
+            User user = session.get(User.class, 2);
+
+            System.out.println();
 
             session.getTransaction().commit();
         }

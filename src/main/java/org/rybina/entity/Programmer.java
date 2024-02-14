@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.PrimaryKeyJoinColumn;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
@@ -11,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@DiscriminatorValue("p")
+@PrimaryKeyJoinColumn(name = "id")
 public class Programmer extends User {
 
     private Language language;
