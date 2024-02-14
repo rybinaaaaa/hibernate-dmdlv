@@ -1,8 +1,10 @@
 package org.rybina;
 
+import org.hibernate.FlushMode;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.jpa.QueryHints;
 import org.hibernate.query.Query;
 import org.junit.jupiter.api.Test;
 import org.rybina.entity.*;
@@ -346,11 +348,18 @@ public class HibernateRunnerTest {
 //                    .setParameter(1, "Maria")
 //                    .list();
 
-            List<User> list = session.createQuery(
-                    "select  u from User u " +
-                    "join u.company c " +
-                    "where u.personalInfo.firstname = :firstname", User.class)
+//            List<User> list = session.createQuery(
+//                    "select  u from User u " +
+//                    "join u.company c " +
+//                    "where u.personalInfo.firstname = :firstname", User.class)
+//                    .setParameter("firstname", "Maria")
+//                    .list();
+
+            List<User> list = session.createNamedQuery(
+                            "findUserByName", User.class)
                     .setParameter("firstname", "Maria")
+                    .setHint(QueryHints.HINT_FETCH_SIZE, 50)
+                    .setHibernateFlushMode(FlushMode.COMMIT)
                     .list();
 
 //            Eq. to query.getResultList
