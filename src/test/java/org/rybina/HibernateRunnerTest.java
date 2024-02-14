@@ -270,6 +270,8 @@ public class HibernateRunnerTest {
 
             session.get(Company.class, 10);
 
+            session.save(Company.builder().name("twitter").build());
+
             session.getTransaction().commit();
         }
     }
