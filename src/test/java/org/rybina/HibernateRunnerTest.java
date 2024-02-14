@@ -3,6 +3,7 @@ package org.rybina;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.junit.jupiter.api.Test;
 import org.rybina.entity.*;
 import org.rybina.util.HibernateTestUtil;
@@ -19,6 +20,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import static java.time.Instant.now;
@@ -330,4 +332,46 @@ public class HibernateRunnerTest {
             session.getTransaction().commit();
         }
     }
+
+    @Test
+    void chackHql() {
+        try (SessionFactory sessionFactory = HibernateTestUtil.buildSessionFactory();
+             Session session = sessionFactory.openSession()
+        ) {
+            session.beginTransaction();
+
+//            JPQL, HQL
+//            List<User> list = session.createQuery(
+//                    "select  u from User u where u.personalInfo.firstname = ?1", User.class)
+//                    .setParameter(1, "Maria")
+//                    .list();
+
+            List<User> list = session.createQuery(
+                    "select  u from User u " +
+                    "join u.company c " +
+                    "where u.personalInfo.firstname = :firstname", User.class)
+                    .setParameter("firstname", "Maria")
+                    .list();
+
+//            Eq. to query.getResultList
+//            query.list()
+
+            session.getTransaction().commit();
+        }
+    }
 }
+
+
+
+//Template
+
+//    @Test
+//    void ?() {
+//        try (SessionFactory sessionFactory = HibernateTestUtil.buildSessionFactory();
+//             Session session = sessionFactory.openSession()
+//        ) {
+//            session.beginTransaction();
+//
+//            session.getTransaction().commit();
+//        }
+//    }
