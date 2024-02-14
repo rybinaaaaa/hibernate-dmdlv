@@ -69,7 +69,7 @@ public class TestDataImporter {
                 .personalInfo(PersonalInfo.builder()
                         .firstname(firstName)
                         .lastName(lastName)
-                        .birthday(new Birthday(birthday))
+                        .birthday(birthday)
                         .build())
                 .company(company)
                 .build();

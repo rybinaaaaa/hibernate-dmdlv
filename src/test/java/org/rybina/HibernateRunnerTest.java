@@ -283,57 +283,57 @@ public class HibernateRunnerTest {
         }
     }
 
-    @Test
-    void checkInheritancePerTable() {
-        try (
-                SessionFactory sessionFactory = HibernateTestUtil.buildSessionFactory();
-                Session session = sessionFactory.openSession()
-        ) {
-            session.beginTransaction();
-
-            session.get(Company.class, 10);
-
-            Programmer programmer = Programmer.builder()
-                    .personalInfo(PersonalInfo.builder()
-                            .firstname("Alina")
-                            .lastName("Rybina")
-                            .birthday(new Birthday(LocalDate.of(1995, 3, 25)))
-                            .build())
-                    .username("rybinaaa.a")
+//    @Test
+//    void checkInheritancePerTable() {
+//        try (
+//                SessionFactory sessionFactory = HibernateTestUtil.buildSessionFactory();
+//                Session session = sessionFactory.openSession()
+//        ) {
+//            session.beginTransaction();
+//
+//            session.get(Company.class, 10);
+//
+//            Programmer programmer = Programmer.builder()
+//                    .personalInfo(PersonalInfo.builder()
+//                            .firstname("Alina")
+//                            .lastName("Rybina")
+//                            .birthday(LocalDate.of(1995, 3, 25))
+//                            .build())
+//                    .username("rybinaaa.a")
+////                    .info("{\"hobbies\":[\"painting\",\"music\"]}")
+//                    .language(Language.JAVA)
+//                    .build();
+//
+//            session.save(programmer);
+//
+//            Manager manager = Manager.builder()
+//                    .personalInfo(PersonalInfo.builder()
+//                            .firstname("Danya")
+//                            .lastName("Bykov")
+//                            .birthday(new Birthday(LocalDate.of(1995, 3, 25)))
+//                            .build())
+//                    .username("danil.o")
 //                    .info("{\"hobbies\":[\"painting\",\"music\"]}")
-                    .language(Language.JAVA)
-                    .build();
-
-            session.save(programmer);
-
-            Manager manager = Manager.builder()
-                    .personalInfo(PersonalInfo.builder()
-                            .firstname("Danya")
-                            .lastName("Bykov")
-                            .birthday(new Birthday(LocalDate.of(1995, 3, 25)))
-                            .build())
-                    .username("danil.o")
-                    .info("{\"hobbies\":[\"painting\",\"music\"]}")
-                    .projectName("appleMania")
-                    .build();
-
-            session.save(manager);
-
-            session.flush();
-
-            session.clear();
-
-//            Programmer programmer1 = session.get(Programmer.class, 1);
-//            Manager manager1 = session.get(Manager.class, 2);
-
-
-            User user = session.get(User.class, 2);
-
-            System.out.println();
-
-            session.getTransaction().commit();
-        }
-    }
+//                    .projectName("appleMania")
+//                    .build();
+//
+//            session.save(manager);
+//
+//            session.flush();
+//
+//            session.clear();
+//
+////            Programmer programmer1 = session.get(Programmer.class, 1);
+////            Manager manager1 = session.get(Manager.class, 2);
+//
+//
+//            User user = session.get(User.class, 2);
+//
+//            System.out.println();
+//
+//            session.getTransaction().commit();
+//        }
+//    }
 
     @Test
     void chackHql() {

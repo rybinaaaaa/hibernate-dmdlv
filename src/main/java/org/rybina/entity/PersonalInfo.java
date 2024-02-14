@@ -10,6 +10,7 @@ import javax.persistence.Convert;
 import javax.persistence.Embeddable;
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -24,6 +25,6 @@ public class PersonalInfo implements Serializable {
     private String firstname;
     private String lastName;
 
-    @Convert(converter = BirthdayConvertor.class)
-    private Birthday birthday;
+//    @Convert(converter = BirthdayConvertor.class)
+    private LocalDate birthday;
 }
