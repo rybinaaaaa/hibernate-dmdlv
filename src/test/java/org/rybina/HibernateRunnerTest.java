@@ -309,7 +309,7 @@ public class HibernateRunnerTest {
                             .birthday(new Birthday(LocalDate.of(1995, 3, 25)))
                             .build())
                     .username("danil.o")
-//                    .info("{\"hobbies\":[\"painting\",\"music\"]}")
+                    .info("{\"hobbies\":[\"painting\",\"music\"]}")
                     .projectName("appleMania")
                     .build();
 
@@ -320,6 +320,7 @@ public class HibernateRunnerTest {
             session.clear();
 
             Programmer programmer1 = session.get(Programmer.class, 1);
+            Manager manager1 = session.get(Manager.class, 2);
 
             session.getTransaction().commit();
         }

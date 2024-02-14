@@ -14,14 +14,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "username")
-@TypeDef(name = "convJson", typeClass = JsonBinaryType.class)
+@TypeDef(name = "json", typeClass = JsonBinaryType.class)
 @Entity
 @Table(name = "users", schema = "public")
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "type")
 public abstract class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Embedded
@@ -30,7 +31,8 @@ public abstract class User {
     @Column
     private String username;
 
-    @Type(type = "convJson")
+    @Column(columnDefinition = "jsonb")
+    @Type(type = "json")
     private String info;
 
     @ManyToOne

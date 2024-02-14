@@ -4,6 +4,7 @@ import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.*;
 import org.hibernate.annotations.TypeDef;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Entity
+@DiscriminatorValue("m")
 public class Manager extends User {
 
     private String projectName;

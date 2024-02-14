@@ -1,9 +1,8 @@
 package org.rybina.entity;
 
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.*;
-import org.hibernate.annotations.TypeDef;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import java.util.List;
 
@@ -12,7 +11,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Programmer extends User{
+@DiscriminatorValue("p")
+public class Programmer extends User {
 
     private Language language;
 
