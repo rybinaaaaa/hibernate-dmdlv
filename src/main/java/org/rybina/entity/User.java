@@ -2,12 +2,15 @@ package org.rybina.entity;
 
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @NamedQuery(name = "findUserByName", query = "select  u from User u " +
@@ -46,11 +49,13 @@ public class User {
     private Profile profile;
 
     @Builder.Default
-    @OneToMany(mappedBy = "user")
+    @BatchSize(size = 5)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<UserChat> userChats = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "receiver")
+    @BatchSize(size = 2)
+    @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
     private List<Payment> payments = new ArrayList<>();
 
     public String fullName() {
