@@ -106,17 +106,16 @@ public class UserDao {
 //                .setParameter("firstName", firstName)
 //                .setParameter("lastName", lastName)
 //                .uniqueResult();
-        List<Predicate> predicates = new ArrayList<>();
-        if (filter.getFirstName() != null) {
-            predicates.add(user.personalInfo.firstname.eq(filter.getFirstName()));
-        }
-        if (filter.getLastName() != null) {
-            predicates.add(user.personalInfo.lastName.eq(filter.getLastName()));
-        }
+
+        Predicate predicate = QPredicate.builder()
+                .add(filter.getFirstName(), payment.receiver.personalInfo.firstname::eq)
+                .add(filter.getLastName(), payment.receiver.personalInfo.lastName::eq)
+                .buildAnd();
+
         return new JPAQuery<Double>(session)
                 .select(payment.amount.avg())
                 .from(payment)
-                .where(predicates.toArray(Predicate[]::new))
+                .where(predicate)
                 .fetchOne();
     }
 

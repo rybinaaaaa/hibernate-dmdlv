@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.rybina.dto.CompanyDto;
+import org.rybina.dto.PaymentFilter;
 import org.rybina.entity.Payment;
 import org.rybina.entity.User;
 import org.rybina.util.HibernateTestUtil;
@@ -112,7 +113,12 @@ class UserDaoTest {
         @Cleanup Session session = sessionFactory.openSession();
         session.beginTransaction();
 
-        Double averagePaymentAmount = userDao.findAveragePaymentAmountByFirstAndLastNames(session, "Bill", "Gates");
+        PaymentFilter paymentFilter = PaymentFilter.builder()
+                .firstName("Bill")
+                .lastName("Gates")
+                .build();
+
+        Double averagePaymentAmount = userDao.findAveragePaymentAmountByFirstAndLastNames(session, paymentFilter);
         assertThat(averagePaymentAmount).isEqualTo(300.0);
 
         session.getTransaction().commit();
