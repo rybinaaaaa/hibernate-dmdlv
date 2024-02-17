@@ -16,12 +16,12 @@ public class HibernateRunner {
              Session session = sessionFactory.openSession()) {
             session.getTransaction().begin();
 
-            users = session.createQuery("from User", User.class).list();
+            users = session.createQuery("from User where id > 3", User.class).list();
 
-//            users.forEach(u -> u.getPayments().forEach(payment -> payment.getId()));
-            users.get(0).getPayments().forEach(payment -> payment.getId());
-            session.getTransaction().commit();
+            users.forEach(u -> u.getPayments().forEach(payment -> payment.getId()));
+//            users.get(0).getPayments().forEach(payment -> payment.getId());
+//            session.getTransaction().commit();
         }
-        users.forEach(u-> System.out.println(u.getPayments()));
+//        users.forEach(u-> System.out.println(u.getPayments()));
     }
 }
