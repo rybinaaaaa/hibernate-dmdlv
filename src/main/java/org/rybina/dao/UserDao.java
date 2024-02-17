@@ -1,13 +1,16 @@
 package org.rybina.dao;
 
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQuery;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.hibernate.Session;
+import org.rybina.dto.PaymentFilter;
 import org.rybina.entity.Payment;
 import org.rybina.entity.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.rybina.entity.QCompany.company;
@@ -96,18 +99,24 @@ public class UserDao {
     /**
      * Возвращает среднюю зарплату сотрудника с указанными именем и фамилией
      */
-    public Double findAveragePaymentAmountByFirstAndLastNames(Session session, String firstName, String lastName) {
+    public Double findAveragePaymentAmountByFirstAndLastNames(Session session, PaymentFilter filter) {
 //        return session.createQuery("select avg(amount) from Payment p " +
 //                                   "where p.receiver.personalInfo.firstname = :firstName " +
 //                                   "and p.receiver.personalInfo.lastName = :lastName", Double.class)
 //                .setParameter("firstName", firstName)
 //                .setParameter("lastName", lastName)
 //                .uniqueResult();
+        List<Predicate> predicates = new ArrayList<>();
+        if (filter.getFirstName() != null) {
+            predicates.add(user.personalInfo.firstname.eq(filter.getFirstName()));
+        }
+        if (filter.getLastName() != null) {
+            predicates.add(user.personalInfo.lastName.eq(filter.getLastName()));
+        }
         return new JPAQuery<Double>(session)
                 .select(payment.amount.avg())
                 .from(payment)
-                .where(payment.receiver.personalInfo.firstname.eq(firstName)
-                        .and(payment.receiver.personalInfo.lastName.eq(lastName)))
+                .where(predicates.toArray(Predicate[]::new))
                 .fetchOne();
     }
 
