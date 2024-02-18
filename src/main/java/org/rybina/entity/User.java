@@ -24,16 +24,16 @@ import java.util.List;
 @Entity
 @Table(name = "users", schema = "public")
 @Builder
-@NamedEntityGraph(
-        name = "WithCompanyAndChat",
-        attributeNodes = {
-                @NamedAttributeNode("company"),
-                @NamedAttributeNode(value = "userChats", subgraph = "chatskillallmen")
-        },
-        subgraphs = {
-                @NamedSubgraph(name ="chatskillallmen", attributeNodes = @NamedAttributeNode("chat"))
-        }
-)
+//@NamedEntityGraph(
+//        name = "WithCompanyAndChat",
+//        attributeNodes = {
+//                @NamedAttributeNode("company"),
+//                @NamedAttributeNode(value = "userChats", subgraph = "chatskillallmen")
+//        },
+//        subgraphs = {
+//                @NamedSubgraph(name ="chatskillallmen", attributeNodes = @NamedAttributeNode("chat"))
+//        }
+//)
 public class User {
 
     @Id
