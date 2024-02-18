@@ -5,6 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.jpa.QueryHints;
 import org.rybina.entity.Payment;
+import org.rybina.intercepror.GlobalInterceptor;
 import org.rybina.util.HibernateUtil;
 import org.rybina.util.TestDataImporter;
 
@@ -17,7 +18,7 @@ public class HibernateRunner {
     @Transactional
     public static void main(String[] args) {
         try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
-             Session session = sessionFactory.openSession()) {
+             Session session = sessionFactory.withOptions().interceptor(new GlobalInterceptor()).openSession()) {
             TestDataImporter.importData(sessionFactory);
 
             session.beginTransaction();

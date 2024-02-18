@@ -8,6 +8,7 @@ import org.hibernate.event.service.spi.EventListenerRegistry;
 import org.hibernate.event.spi.EventType;
 import org.hibernate.internal.SessionFactoryImpl;
 import org.rybina.entity.User;
+import org.rybina.intercepror.GlobalInterceptor;
 import org.rybina.listener.AuditTableListener;
 
 @UtilityClass
@@ -42,6 +43,7 @@ public class HibernateUtil {
         configuration.addAnnotatedClass(User.class);
 //        configuration.addAttributeConverter(new BirthdayConvertor(), true);
         configuration.registerTypeOverride(new JsonBinaryType());
+        configuration.setInterceptor(new GlobalInterceptor());
         return configuration;
     }
 }
