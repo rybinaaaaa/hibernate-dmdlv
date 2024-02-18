@@ -17,28 +17,25 @@ public class HibernateRunner {
     @Transactional
     public static void main(String[] args) {
         try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
-             Session session = sessionFactory.openSession();
-             Session session1 = sessionFactory.openSession()) {
+             Session session = sessionFactory.openSession()) {
 //            TestDataImporter.importData(sessionFactory);
 
             session.beginTransaction();
-            session1.beginTransaction();
+            session.setDefaultReadOnly(true);
+
 
             session.createQuery("from Payment ", Payment.class)
                     .setLockMode(LockModeType.PESSIMISTIC_READ)
-                    .setHint("javax.persistence.lock.timeout", 5000)
+                    .setHint(QueryHints.HINT_READONLY, true)
                     .list();
 
 //            OPTIMISTIC - обновляет внрсию сущности если мы в ней что-то меняем
 //            OPTIMISTIC_FORCE_INCREMENT обновляет версию сущности в любом случае
 //            PESSIMISTIC_READ
-            Payment payment = session.find(Payment.class, 1, LockModeType.PESSIMISTIC_READ);
+            Payment payment = session.find(Payment.class, 1);
+
             payment.setAmount(payment.getAmount() + 10);
 
-            Payment theSamePayment = session1.find(Payment.class, 1);
-            theSamePayment.setAmount(payment.getAmount() + 15);
-
-            session1.getTransaction().commit();
             session.getTransaction().commit();
         }
     }
