@@ -4,16 +4,13 @@ import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.*;
 import org.hibernate.annotations.*;
 
-import javax.persistence.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
 
 @NamedQuery(name = "findUserByName", query = "select  u from User u " +
                                              "join u.company c " +
@@ -27,14 +24,16 @@ import java.util.Set;
 @Entity
 @Table(name = "users", schema = "public")
 @Builder
-@FetchProfile(name = "withCompanyAndPayment", fetchOverrides = {
-        @FetchProfile.FetchOverride(
-                entity = User.class, association = "company", mode = FetchMode.JOIN
-        ),
-        @FetchProfile.FetchOverride(
-                entity = User.class, association = "payments", mode = FetchMode.JOIN
-        )
-})
+@NamedEntityGraph(
+        name = "WithCompanyAndChat",
+        attributeNodes = {
+                @NamedAttributeNode("company"),
+                @NamedAttributeNode(value = "userChats", subgraph = "chatskillallmen")
+        },
+        subgraphs = {
+                @NamedSubgraph(name ="chatskillallmen", attributeNodes = @NamedAttributeNode("chat"))
+        }
+)
 public class User {
 
     @Id
@@ -51,7 +50,7 @@ public class User {
     @Type(type = "json")
     private String info;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     private Company company;
 
@@ -72,3 +71,4 @@ public class User {
         return getPersonalInfo().getFirstname() + " " + getPersonalInfo().getLastName();
     }
 }
+

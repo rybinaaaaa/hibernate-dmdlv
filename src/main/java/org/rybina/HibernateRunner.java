@@ -2,11 +2,14 @@ package org.rybina;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.graph.RootGraph;
+import org.hibernate.jpa.QueryHints;
 import org.rybina.entity.User;
 import org.rybina.util.HibernateUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class HibernateRunner {
 
@@ -15,16 +18,18 @@ public class HibernateRunner {
         try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
              Session session = sessionFactory.openSession()) {
             session.getTransaction().begin();
-            session.enableFetchProfile("withCompanyAndPayment");
+            RootGraph<?> graph = session.getEntityGraph("WithCompanyAndChat");
 
-            User user = session.get(User.class, 1);
+//            Hint providing a "loadgraph" EntityGraph. Attributes explicitly specified as AttributeNodes are treated as FetchType.EAGER (via join fetch or subsequent select). Attributes that are not specified are treated as FetchType.LAZY or FetchType.EAGER depending on the attribute's definition in metadata
+            Map<String, Object> properties = Map.of(QueryHints.HINT_LOADGRAPH, graph);
+
+//            Судя по документации щас нет отличий между fetch и load
+//            Hint providing a "fetchgraph" EntityGraph. Attributes explicitly specified as AttributeNodes are treated as FetchType.EAGER (via join fetch or subsequent select). Note: Currently, attributes that are not specified are treated as FetchType.LAZY or FetchType.EAGER depending on the attribute's definition in metadata, rather than forcing FetchType.LAZY.
+//            Map<String, Object> properties = Map.of(QueryHints.HINT_FETCHGRAPH, graph);
+
+            var user = session.find(User.class, 1, properties);
+
             System.out.println(user.getCompany().getName());
-//            users = session.createQuery("from User where id > 3", User.class).list();
-
-//            users.forEach(u -> u.getPayments().forEach(payment -> payment.getId()));
-//            users.get(0).getPayments().forEach(payment -> payment.getId());
-//            session.getTransaction().commit();
         }
-//        users.forEach(u-> System.out.println(u.getPayments()));
     }
 }
