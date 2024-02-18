@@ -19,10 +19,9 @@ public class HibernateUtil {
         Configuration configuration = buildConfiguration();
         configuration.configure();
 
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        registerListeners(sessionFactory);
+        //        registerListeners(sessionFactory);
 
-        return sessionFactory;
+        return configuration.buildSessionFactory();
     }
 
     private static void registerListeners(SessionFactory sessionFactory) {

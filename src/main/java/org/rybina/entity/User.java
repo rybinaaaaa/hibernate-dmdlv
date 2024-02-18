@@ -3,6 +3,8 @@ package org.rybina.entity;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.*;
 import org.hibernate.annotations.*;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -34,6 +36,7 @@ import java.util.List;
 //                @NamedSubgraph(name ="chatskillallmen", attributeNodes = @NamedAttributeNode("chat"))
 //        }
 //)
+@Audited
 public class User {
 
     @Id
@@ -52,17 +55,21 @@ public class User {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
+    @NotAudited
     private Company company;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @NotAudited
     private Profile profile;
 
     @Builder.Default
 //    @BatchSize(size = 5)
+    @NotAudited
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<UserChat> userChats = new ArrayList<>();
 
     @Builder.Default
+    @NotAudited
 //    @Fetch(FetchMode.SUBSELECT)
     @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
     private List<Payment> payments = new ArrayList<>();
