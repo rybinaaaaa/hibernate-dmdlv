@@ -21,7 +21,8 @@ public class HibernateRunner {
 
 //            OPTIMISTIC - обновляет внрсию сущности если мы в ней что-то меняем
 //            OPTIMISTIC_FORCE_INCREMENT обновляет версию сущности в любом случае
-            Payment payment = session.find(Payment.class, 1, LockModeType.OPTIMISTIC);
+//            PESSIMISTIC_READ
+            Payment payment = session.find(Payment.class, 1, LockModeType.PESSIMISTIC_READ);
             payment.setAmount(payment.getAmount() + 10);
 
             session.getTransaction().commit();
