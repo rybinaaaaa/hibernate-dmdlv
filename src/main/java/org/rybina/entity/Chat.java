@@ -1,6 +1,7 @@
 package org.rybina.entity;
 
 import lombok.*;
+import org.rybina.convertor.listener.UserChatListener;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @ToString(exclude = "userChats")
+@EntityListeners(UserChatListener.class)
 public class Chat {
 
     @Id
@@ -20,6 +22,8 @@ public class Chat {
 
     @Column(nullable = false, unique = true)
     String name;
+
+    private Integer count;
 
     @Builder.Default
     @OneToMany(mappedBy = "chat")

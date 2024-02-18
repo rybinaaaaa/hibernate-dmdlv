@@ -18,11 +18,11 @@ public class HibernateRunner {
     public static void main(String[] args) {
         try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
              Session session = sessionFactory.openSession()) {
-//            TestDataImporter.importData(sessionFactory);
+            TestDataImporter.importData(sessionFactory);
 
             session.beginTransaction();
 
-            Payment payment = session.find(Payment.class, 1);
+            Payment payment = session.find(Payment.class, 2);
 
             payment.setAmount(payment.getAmount() + 10);
 
