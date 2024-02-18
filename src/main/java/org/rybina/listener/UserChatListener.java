@@ -1,4 +1,4 @@
-package org.rybina.convertor.listener;
+package org.rybina.listener;
 
 import org.rybina.entity.Chat;
 import org.rybina.entity.UserChat;

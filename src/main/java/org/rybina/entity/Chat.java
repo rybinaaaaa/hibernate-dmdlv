@@ -1,7 +1,6 @@
 package org.rybina.entity;
 
 import lombok.*;
-import org.rybina.convertor.listener.UserChatListener;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,7 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @ToString(exclude = "userChats")
-@EntityListeners(UserChatListener.class)
 public class Chat {
 
     @Id

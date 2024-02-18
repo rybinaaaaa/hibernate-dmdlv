@@ -1,10 +1,9 @@
 package org.rybina.entity;
 
 import lombok.*;
+import org.rybina.listener.UserChatListener;
 
 import javax.persistence.*;
-import java.time.Instant;
-import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -13,6 +12,7 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "users_chat")
+@EntityListeners(UserChatListener.class)
 public class UserChat extends AuditableEntity<Integer> {
 
     @ManyToOne

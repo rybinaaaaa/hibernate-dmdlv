@@ -2,7 +2,7 @@ package org.rybina.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.rybina.convertor.listener.AuditListener;
+import org.rybina.listener.AuditListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
