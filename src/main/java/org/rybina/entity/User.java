@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.*;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -36,7 +37,7 @@ import java.util.List;
 //                @NamedSubgraph(name ="chatskillallmen", attributeNodes = @NamedAttributeNode("chat"))
 //        }
 //)
-@Audited
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 public class User {
 
     @Id
@@ -55,11 +56,11 @@ public class User {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
-    @NotAudited
+//    @NotAudited
     private Company company;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    @NotAudited
+//    @NotAudited
     private Profile profile;
 
     @Builder.Default
