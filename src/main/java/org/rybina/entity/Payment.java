@@ -2,6 +2,8 @@ package org.rybina.entity;
 
 
 import lombok.*;
+import org.hibernate.annotations.OptimisticLockType;
+import org.hibernate.annotations.OptimisticLocking;
 
 import javax.persistence.*;
 
@@ -11,16 +13,20 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 @ToString(exclude = {"receiver"})
+@OptimisticLocking(type = OptimisticLockType.VERSION)
 public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Version
+    private Long version;
+
     @Column(nullable = false)
     private Integer amount;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiver_id")
     private User receiver;
 }

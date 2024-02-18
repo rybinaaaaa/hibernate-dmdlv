@@ -58,12 +58,12 @@ public class User {
     private Profile profile;
 
     @Builder.Default
-    @BatchSize(size = 5)
+//    @BatchSize(size = 5)
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<UserChat> userChats = new ArrayList<>();
 
     @Builder.Default
-    @Fetch(FetchMode.SUBSELECT)
+//    @Fetch(FetchMode.SUBSELECT)
     @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
     private List<Payment> payments = new ArrayList<>();
 
