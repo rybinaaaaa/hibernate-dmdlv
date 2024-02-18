@@ -15,10 +15,13 @@ public class HibernateRunner {
         try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
              Session session = sessionFactory.openSession()) {
             session.getTransaction().begin();
+            session.enableFetchProfile("withCompanyAndPayment");
 
-            users = session.createQuery("from User where id > 3", User.class).list();
+            User user = session.get(User.class, 1);
+            System.out.println(user.getCompany().getName());
+//            users = session.createQuery("from User where id > 3", User.class).list();
 
-            users.forEach(u -> u.getPayments().forEach(payment -> payment.getId()));
+//            users.forEach(u -> u.getPayments().forEach(payment -> payment.getId()));
 //            users.get(0).getPayments().forEach(payment -> payment.getId());
 //            session.getTransaction().commit();
         }

@@ -27,6 +27,14 @@ import java.util.Set;
 @Entity
 @Table(name = "users", schema = "public")
 @Builder
+@FetchProfile(name = "withCompanyAndPayment", fetchOverrides = {
+        @FetchProfile.FetchOverride(
+                entity = User.class, association = "company", mode = FetchMode.JOIN
+        ),
+        @FetchProfile.FetchOverride(
+                entity = User.class, association = "payments", mode = FetchMode.JOIN
+        )
+})
 public class User {
 
     @Id
