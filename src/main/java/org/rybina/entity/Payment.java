@@ -7,7 +7,9 @@ import org.hibernate.annotations.OptimisticLockType;
 import org.hibernate.annotations.OptimisticLocking;
 
 import javax.persistence.*;
+import java.time.Instant;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 @NoArgsConstructor
@@ -16,12 +18,7 @@ import javax.persistence.*;
 @ToString(exclude = {"receiver"})
 //@OptimisticLocking(type = OptimisticLockType.DIRTY)
 //@DynamicUpdate
-public class Payment {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
+public class Payment extends AuditableEntity<Integer> {
 //    @Version
 //    private Long version;
 
@@ -31,4 +28,14 @@ public class Payment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiver_id")
     private User receiver;
+
+    @PrePersist
+    public void prePersist() {
+        setCreatedAt(Instant.now());
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        setUpdatedAt(Instant.now());
+    }
 }

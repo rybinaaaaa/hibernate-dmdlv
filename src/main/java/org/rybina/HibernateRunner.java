@@ -21,17 +21,7 @@ public class HibernateRunner {
 //            TestDataImporter.importData(sessionFactory);
 
             session.beginTransaction();
-            session.setDefaultReadOnly(true);
 
-
-            session.createQuery("from Payment ", Payment.class)
-                    .setLockMode(LockModeType.PESSIMISTIC_READ)
-                    .setHint(QueryHints.HINT_READONLY, true)
-                    .list();
-
-//            OPTIMISTIC - обновляет внрсию сущности если мы в ней что-то меняем
-//            OPTIMISTIC_FORCE_INCREMENT обновляет версию сущности в любом случае
-//            PESSIMISTIC_READ
             Payment payment = session.find(Payment.class, 1);
 
             payment.setAmount(payment.getAmount() + 10);
