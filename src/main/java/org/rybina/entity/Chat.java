@@ -21,7 +21,7 @@ public class Chat {
     @Column(nullable = false, unique = true)
     String name;
 
-    private Integer count;
+    private int count;
 
     @Builder.Default
     @OneToMany(mappedBy = "chat")

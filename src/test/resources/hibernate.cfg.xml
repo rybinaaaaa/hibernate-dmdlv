@@ -19,5 +19,6 @@
         <mapping class="org.rybina.entity.Programmer" />
         <mapping class="org.rybina.entity.Manager" />
         <mapping class="org.rybina.entity.Payment" />
+        <mapping class="org.rybina.entity.Audit" />
     </session-factory>
 </hibernate-configuration>
