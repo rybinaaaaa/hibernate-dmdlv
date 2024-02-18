@@ -22,6 +22,8 @@
     <property name="show_sql">true</property>
     <property name="format_sql">true</property>
 
+<!--    <property name="hibernate.connection.isolation">8</property>-->
+
     <mapping class="org.rybina.entity.User" />
     <mapping class="org.rybina.entity.Company" />
     <mapping class="org.rybina.entity.Chat" />
