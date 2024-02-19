@@ -37,7 +37,7 @@ import java.util.List;
 //                @NamedSubgraph(name ="chatskillallmen", attributeNodes = @NamedAttributeNode("chat"))
 //        }
 //)
-@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+@Audited
 public class User {
 
     @Id
@@ -56,11 +56,11 @@ public class User {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
-//    @NotAudited
+    @NotAudited
     private Company company;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-//    @NotAudited
+    @NotAudited
     private Profile profile;
 
     @Builder.Default

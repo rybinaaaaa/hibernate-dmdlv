@@ -26,7 +26,7 @@ public class Revision {
     private Long id;
 
     @RevisionTimestamp
-    private Long timestemp;
+    private Long timestamp;
 
     private String userInfo;
 }
