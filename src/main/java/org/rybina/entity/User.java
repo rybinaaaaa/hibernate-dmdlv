@@ -39,7 +39,7 @@ import java.util.List;
 //        }
 //)
 @Audited
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "users")
 public class User {
 
     @Id

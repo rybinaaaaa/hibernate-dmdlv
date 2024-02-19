@@ -1,6 +1,7 @@
 package org.rybina.entity;
 
 import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.SortNatural;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ import java.util.TreeMap;
 @ToString(exclude = "users")
 @AllArgsConstructor
 @Builder
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "companies")
 public class Company {
 
     @Id
