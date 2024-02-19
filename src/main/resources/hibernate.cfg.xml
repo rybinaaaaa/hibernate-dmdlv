@@ -34,6 +34,7 @@
     <mapping class="org.rybina.entity.Manager" />
     <mapping class="org.rybina.entity.Payment" />
     <mapping class="org.rybina.entity.Audit" />
+    <mapping class="org.rybina.entity.Revision" />
     <!-- DB schema will be updated if needed -->
   </session-factory>
 </hibernate-configuration>
