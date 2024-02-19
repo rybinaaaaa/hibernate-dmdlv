@@ -1,5 +1,6 @@
 package org.rybina;
 
+import org.hibernate.ReplicationMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.envers.AuditReader;
@@ -28,17 +29,6 @@ public class HibernateRunner {
                 user.setUsername(user.getUsername() + "test");
 
                 session.getTransaction().commit();
-            }
-            try (Session session2 = sessionFactory.openSession()) {
-                session2.beginTransaction();
-
-                AuditReader auditReader = AuditReaderFactory.get(session2);
-//                auditReader.find(Payment.class, 1, new Date(1708350004613L));
-                User oldUser = auditReader.find(User.class, 1, 1L);
-
-                System.out.println();
-
-                session2.getTransaction().commit();
             }
         }
     }
