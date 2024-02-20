@@ -21,53 +21,53 @@ import org.rybina.util.HibernateUtil;
 import javax.transaction.Transactional;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
+import java.sql.SQLException;
 import java.time.LocalDate;
 
 
 public class HibernateRunner {
 
     @Transactional
-    public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    public static void main(String[] args) throws SQLException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory()) {
-            User user = null;
-            Session session = (Session) Proxy.newProxyInstance(SessionFactory.class.getClassLoader(), new Class[]{Session.class},
+            var session = (Session) Proxy.newProxyInstance(SessionFactory.class.getClassLoader(), new Class[]{Session.class},
                     (proxy, method, args1) -> method.invoke(sessionFactory.getCurrentSession(), args1));
+//            session.beginTransaction();
 
-            session.beginTransaction();
+            var companyRepository = new CompanyRepository(session);
 
+            var companyReadMapper = new CompanyReadMapper();
+            var userReadMapper = new UserReadMapper(companyReadMapper);
+            var userCreateMapper = new UserCreateMapper(companyRepository);
 
-            CompanyRepository companyRepository = new CompanyRepository(session);
-            UserRepository userRepository = new UserRepository(session);
-            PaymentRepository paymentRepository = new PaymentRepository(session);
+            var userRepository = new UserRepository(session);
+            var paymentRepository = new PaymentRepository(session);
+//            var userService = new UserService(userRepository, userReadMapper, userCreateMapper);
+            var transactionInterceptor = new TransactionalInterceptor(sessionFactory);
 
-
-            CompanyReadMapper companyReadMapper = new CompanyReadMapper();
-            UserReadMapper userReadMapper = new UserReadMapper(companyReadMapper);
-            UserCreateMapper userCreateMapper = new UserCreateMapper(companyRepository);
-
-
-            UserService userService = new UserService(userRepository, userReadMapper, userCreateMapper);
-
-            TransactionalInterceptor transactionalInterceptor = new TransactionalInterceptor(sessionFactory);
-
-            new ByteBuddy()
+            var userService = new ByteBuddy()
                     .subclass(UserService.class)
                     .method(ElementMatchers.any())
-                    .intercept(MethodDelegation.to(transactionalInterceptor))
+                    .intercept(MethodDelegation.to(transactionInterceptor))
                     .make()
                     .load(UserService.class.getClassLoader())
                     .getLoaded()
                     .getDeclaredConstructor(UserRepository.class, UserReadMapper.class, UserCreateMapper.class)
                     .newInstance(userRepository, userReadMapper, userCreateMapper);
 
-            UserCreateDto userCreateDto = new UserCreateDto(PersonalInfo.builder()
-                    .firstname("Liza").lastName("test").birthday(LocalDate.now()).build(),
-                    "test liza", null, 1);
-
-            userService.create(userCreateDto);
             userService.findById(1).ifPresent(System.out::println);
 
-            session.getTransaction().commit();
+            UserCreateDto userCreateDto = new UserCreateDto(
+                    PersonalInfo.builder()
+                            .firstname(null)
+                            .lastName("Stepanova")
+                            .birthday(LocalDate.now())
+                            .build(),
+                    "liza2@gmail.com",
+                    null,
+                    1
+            );
+            userService.create(userCreateDto);
         }
     }
 }

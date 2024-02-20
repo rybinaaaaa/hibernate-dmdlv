@@ -8,6 +8,7 @@ import org.rybina.convertor.BirthdayConvertor;
 
 import javax.persistence.Convert;
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotNull;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -22,7 +23,11 @@ public class PersonalInfo implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
+
+    @NotNull
     private String firstname;
+
+    @NotNull
     private String lastName;
 
 //    @Convert(converter = BirthdayConvertor.class)

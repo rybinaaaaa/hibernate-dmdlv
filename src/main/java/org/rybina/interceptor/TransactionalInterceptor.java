@@ -16,14 +16,13 @@ public class TransactionalInterceptor {
 
     private final SessionFactory sessionFactory;
 
+    // findByid -> saveCompany -> saveLocales
     @RuntimeType
-    public Object intercept(@SuperCall Callable<Object> call, @Origin Method method) {
+    public Object intercept(@SuperCall Callable<Object> call, @Origin Method method) throws Exception {
         Transaction transaction = null;
-
         boolean transactionStarted = false;
         if (method.isAnnotationPresent(Transactional.class)) {
             transaction = sessionFactory.getCurrentSession().getTransaction();
-
             if (!transaction.isActive()) {
                 transaction.begin();
                 transactionStarted = true;
@@ -31,7 +30,6 @@ public class TransactionalInterceptor {
         }
 
         Object result;
-
         try {
             result = call.call();
             if (transactionStarted) {
@@ -41,10 +39,8 @@ public class TransactionalInterceptor {
             if (transactionStarted) {
                 transaction.rollback();
             }
-
-            throw new RuntimeException();
+            throw e;
         }
-
         return result;
     }
 }

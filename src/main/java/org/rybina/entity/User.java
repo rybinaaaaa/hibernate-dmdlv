@@ -10,6 +10,8 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +40,11 @@ import java.util.List;
 @NamedEntityGraph(
         name = "WithCompany",
         attributeNodes = {
-                @NamedAttributeNode("company")}
+                @NamedAttributeNode(value = "company", subgraph = "locales"),
+        },
+        subgraphs ={
+                @NamedSubgraph(name = "locales", attributeNodes =  @NamedAttributeNode("localeInfos"))
+        }
 )
 @Audited
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "users")
@@ -48,17 +54,19 @@ public class User extends BaseEntity<Integer> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Valid
     @Embedded
     private PersonalInfo personalInfo;
 
     @Column
+    @NotNull
     private String username;
 
     @Column(columnDefinition = "jsonb")
     @Type(type = "json")
     private String info;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     @NotAudited
     private Company company;

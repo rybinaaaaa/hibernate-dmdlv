@@ -11,8 +11,10 @@ import org.rybina.mapper.UserCreateMapper;
 import org.rybina.mapper.UserReadMapper;
 
 import javax.transaction.Transactional;
+import javax.validation.*;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 @RequiredArgsConstructor
 public class UserService {
@@ -24,6 +26,15 @@ public class UserService {
     @Transactional
     public Integer create(UserCreateDto userCreateDto) {
         // validation
+
+        ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
+        Validator validator = validatorFactory.getValidator();
+        Set<ConstraintViolation<UserCreateDto>> validated = validator.validate(userCreateDto);
+
+        if (!validated.isEmpty()) {
+            throw new ConstraintViolationException(validated);
+        }
+
         // map
         User user = userCreateMapper.mapFrom(userCreateDto);
         return userRepository.save(user).getId();
