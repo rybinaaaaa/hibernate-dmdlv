@@ -291,7 +291,7 @@ public class HibernateRunnerTest {
 //        ) {
 //            session.beginTransaction();
 //
-//            session.get(Company.class, 10);
+//            session.get(CompanyRepository.class, 10);
 //
 //            Programmer programmer = Programmer.builder()
 //                    .personalInfo(PersonalInfo.builder()

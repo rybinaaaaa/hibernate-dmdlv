@@ -48,6 +48,18 @@ public class HibernateRunner {
 
             UserService userService = new UserService(userRepository, userReadMapper, userCreateMapper);
 
+            TransactionalInterceptor transactionalInterceptor = new TransactionalInterceptor(sessionFactory);
+
+            new ByteBuddy()
+                    .subclass(UserService.class)
+                    .method(ElementMatchers.any())
+                    .intercept(MethodDelegation.to(transactionalInterceptor))
+                    .make()
+                    .load(UserService.class.getClassLoader())
+                    .getLoaded()
+                    .getDeclaredConstructor(UserRepository.class, UserReadMapper.class, UserCreateMapper.class)
+                    .newInstance(userRepository, userReadMapper, userCreateMapper);
+
             UserCreateDto userCreateDto = new UserCreateDto(PersonalInfo.builder()
                     .firstname("Liza").lastName("test").birthday(LocalDate.now()).build(),
                     "test liza", null, 1);
