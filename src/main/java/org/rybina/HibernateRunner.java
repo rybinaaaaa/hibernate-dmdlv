@@ -11,6 +11,7 @@ import org.rybina.entity.User;
 import org.rybina.util.HibernateUtil;
 
 import javax.transaction.Transactional;
+import java.lang.reflect.Proxy;
 import java.util.List;
 
 
@@ -20,10 +21,13 @@ public class HibernateRunner {
     public static void main(String[] args) {
         try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory()) {
             User user = null;
-            try (Session session = sessionFactory.openSession()) {
+            try (Session session = sessionFactory.getCurrentSession()) {
+                Proxy.newProxyInstance(SessionFactory.class.getClassLoader(), new Class[]{Session.class},
+                        (proxy, method, args1) -> method.invoke(sessionFactory.getCurrentSession(), args));
+
                 session.beginTransaction();
 
-                PaymentRepository paymentRepository = new PaymentRepository(sessionFactory);
+                PaymentRepository paymentRepository = new PaymentRepository(session);
 
                 paymentRepository.findById(1).ifPresent(System.out::println);
 
