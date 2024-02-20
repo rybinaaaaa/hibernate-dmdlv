@@ -5,6 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
+import org.rybina.dao.PaymentRepository;
 import org.rybina.entity.Payment;
 import org.rybina.entity.User;
 import org.rybina.util.HibernateUtil;
@@ -22,34 +23,12 @@ public class HibernateRunner {
             try (Session session = sessionFactory.openSession()) {
                 session.beginTransaction();
 
-//                TestDataImporter.importData(sessionFactory);
-                List<Payment> payments = session.createQuery("from Payment  where receiver.id = :userId", Payment.class)
-                        .setParameter("userId", 2)
-                        .setCacheable(true)
-//                        .setCacheRegion()
-                        .getResultList();
+                PaymentRepository paymentRepository = new PaymentRepository(sessionFactory);
 
-//                user = session.find(User.class, 2);
-//                User user1 = session.find(User.class, 2);
+                paymentRepository.findById(1).ifPresent(System.out::println);
 
                 session.getTransaction().commit();
-            }
-            try (Session session = sessionFactory.openSession()) {
-                session.beginTransaction();
-
-//                TestDataImporter.importData(sessionFactory);
-
-//                User user2 = session.find(User.class, 2);
-
-                List<Payment> payments = session.createQuery("from Payment  where receiver.id = :userId", Payment.class)
-                        .setParameter("userId", 2)
-                        .setCacheable(true)
-//                        .setCacheRegion()
-                        .getResultList();
-
-                session.getTransaction().commit();
-            }
-        }
+            }}
     }
 }
 
