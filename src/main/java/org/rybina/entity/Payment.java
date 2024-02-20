@@ -2,6 +2,7 @@ package org.rybina.entity;
 
 
 import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.OptimisticLockType;
 import org.hibernate.annotations.OptimisticLocking;
@@ -16,6 +17,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @Builder
 @ToString(exclude = {"receiver"})
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 //@OptimisticLocking(type = OptimisticLockType.DIRTY)
 //@DynamicUpdate
 public class Payment extends AuditableEntity<Integer> {

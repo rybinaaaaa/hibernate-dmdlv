@@ -10,6 +10,7 @@ import org.rybina.entity.User;
 import org.rybina.util.HibernateUtil;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 
 public class HibernateRunner {
@@ -22,9 +23,14 @@ public class HibernateRunner {
                 session.beginTransaction();
 
 //                TestDataImporter.importData(sessionFactory);
+                List<Payment> payments = session.createQuery("from Payment  where receiver.id = :userId", Payment.class)
+                        .setParameter("userId", 2)
+                        .setCacheable(true)
+//                        .setCacheRegion()
+                        .getResultList();
 
-                user = session.find(User.class, 2);
-                User user1 = session.find(User.class, 2);
+//                user = session.find(User.class, 2);
+//                User user1 = session.find(User.class, 2);
 
                 session.getTransaction().commit();
             }
@@ -33,7 +39,13 @@ public class HibernateRunner {
 
 //                TestDataImporter.importData(sessionFactory);
 
-                User user2 = session.find(User.class, 2);
+//                User user2 = session.find(User.class, 2);
+
+                List<Payment> payments = session.createQuery("from Payment  where receiver.id = :userId", Payment.class)
+                        .setParameter("userId", 2)
+                        .setCacheable(true)
+//                        .setCacheRegion()
+                        .getResultList();
 
                 session.getTransaction().commit();
             }

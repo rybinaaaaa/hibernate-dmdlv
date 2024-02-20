@@ -56,7 +56,7 @@ public class User {
     @Type(type = "json")
     private String info;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "company_id")
     @NotAudited
     private Company company;
