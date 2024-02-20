@@ -2,16 +2,13 @@ package org.rybina.entity;
 
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.*;
-import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
-import org.hibernate.envers.RelationTargetAuditMode;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,19 +25,24 @@ import java.util.List;
 @Entity
 @Table(name = "users", schema = "public")
 @Builder
-//@NamedEntityGraph(
-//        name = "WithCompanyAndChat",
-//        attributeNodes = {
-//                @NamedAttributeNode("company"),
-//                @NamedAttributeNode(value = "userChats", subgraph = "chatskillallmen")
-//        },
-//        subgraphs = {
-//                @NamedSubgraph(name ="chatskillallmen", attributeNodes = @NamedAttributeNode("chat"))
-//        }
-//)
+@NamedEntityGraph(
+        name = "WithCompanyAndChat",
+        attributeNodes = {
+                @NamedAttributeNode("company"),
+                @NamedAttributeNode(value = "userChats", subgraph = "chatskillallmen")
+        },
+        subgraphs = {
+                @NamedSubgraph(name ="chatskillallmen", attributeNodes = @NamedAttributeNode("chat"))
+        }
+)
+@NamedEntityGraph(
+        name = "WithCompany",
+        attributeNodes = {
+                @NamedAttributeNode("company")}
+)
 @Audited
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "users")
-public class User {
+public class User extends BaseEntity<Integer> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,6 +1,7 @@
 package org.rybina.dao;
 
 import lombok.Cleanup;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,8 +11,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+@Getter
 @RequiredArgsConstructor
 public abstract class RepositoryBase<K extends Serializable, E extends BaseEntity<K>> implements Repository<K, E> {
     private final EntityManager entityManager;
@@ -41,10 +44,10 @@ public abstract class RepositoryBase<K extends Serializable, E extends BaseEntit
     }
 
     @Override
-    public Optional<E> findById(K id) {
+    public Optional<E> findById(K id, Map<String, Object> properties) {
 //         Session session = sessionFactory.getCurrentSession();
 //        return Optional.ofNullable(session.find(clazz, id));
-        return Optional.ofNullable(entityManager.find(clazz, id));
+        return Optional.ofNullable(entityManager.find(clazz, id, properties));
     }
 
     @Override

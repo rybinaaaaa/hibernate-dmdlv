@@ -18,7 +18,7 @@ public class Programmer {
 //    private Language language;
 //
 //    @Builder
-//    public Programmer(Integer id, PersonalInfo personalInfo, String username, String info, Company company, Profile profile, List<UserChat> userChats, Language language) {
+//    public Programmer(Integer id, PersonalInfo personalInfo, String username, String info, CompanyRepository company, Profile profile, List<UserChat> userChats, Language language) {
 //        super(id, personalInfo, username, info, company, profile, userChats);
 //        this.language = language;
 //    }

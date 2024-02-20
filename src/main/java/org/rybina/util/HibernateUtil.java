@@ -8,7 +8,7 @@ import org.hibernate.event.service.spi.EventListenerRegistry;
 import org.hibernate.event.spi.EventType;
 import org.hibernate.internal.SessionFactoryImpl;
 import org.rybina.entity.User;
-import org.rybina.intercepror.GlobalInterceptor;
+import org.rybina.interceptor.GlobalInterceptor;
 import org.rybina.listener.AuditTableListener;
 
 @UtilityClass

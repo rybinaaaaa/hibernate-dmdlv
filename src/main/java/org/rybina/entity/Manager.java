@@ -20,7 +20,7 @@ public class Manager{
 //    private String projectName;
 //
 //    @Builder
-//    public Manager(Integer id, PersonalInfo personalInfo, String username, String info, Company company, Profile profile, List<UserChat> userChats, String projectName) {
+//    public Manager(Integer id, PersonalInfo personalInfo, String username, String info, CompanyRepository company, Profile profile, List<UserChat> userChats, String projectName) {
 //        super(id, personalInfo, username, info, company, profile, userChats);
 //        this.projectName = projectName;
 //    }

@@ -16,11 +16,7 @@ import java.util.TreeMap;
 @AllArgsConstructor
 @Builder
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "companies")
-public class Company {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class Company extends BaseEntity<Integer> {
 
     @Column
     private String name;

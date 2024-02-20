@@ -1,4 +1,4 @@
-package org.rybina.intercepror;
+package org.rybina.interceptor;
 
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.type.Type;
